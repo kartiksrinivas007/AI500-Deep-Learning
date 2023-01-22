@@ -3,6 +3,19 @@ import math
 
 class Dataset:
     def __init__(self, num_points, n_dim=2 ,mode="NL", dist="Normal", p1=None, p2=None, r1=None , r2=None, separability=None,  w_1= None, frac=0.5, bias=None):
+        """
+        `num_points`: number of points in the dataset
+        `n_dim`: number of dimensions of the dataset
+        `dist`: distribution of the dataset
+        `mode`: mode of the dataset can be Linearly separable(L) or Non-linearly separable(NL)
+        `p1`: mean of the normal distribution
+        `p2`: covariance of the normal distribution
+        `r1`: radius of the first circle
+        `r2`: radius of the second circle
+        `w_1`: normal to the hyperplane
+        `frac`: fraction of points in the dataset that are positive
+        `bias`: bias to be added to the dataset
+        """
         self.p1 = p1
         self.p2 = p2
         self.r1 = r1
@@ -18,18 +31,21 @@ class Dataset:
             if(self.dist == "Normal"):
                 self.ds = np.random.multivariate_normal(self.p1, self.p2, self.num_points) 
                 f = math.ceil(self.num_points*self.frac)
-                self.labels = np.concat(np.ones((f)), -1*np.ones((self.num_points - f)))
+                self.labels = np.concatenate( (np.ones((f)), -1*np.ones((self.num_points - f))), axis = 0)
             elif(self.dist == "Circular"):
                 # create data that is on the border of two circles, add some gaussian noise if needed
                 f = math.ceil(num_points* self.frac)
                 pts_1 = np.random.randn(f, self.n_dim)
-                pts_1 /= np.linalg.norm(pts_1, axis = 1)
+                print(pts_1.shape)
+                norms =  np.linalg.norm(pts_1, axis = 1).reshape(-1,1)
+                print(norms.shape)
+                pts_1 /= norms
                 pts_1 *= r1
                 pts_2 = np.random.randn(num_points - f, self.n_dim)
-                pts_2 /= np.linalg.norm(pts_2, axis = 1)
+                pts_2 /= (np.linalg.norm(pts_2, axis = 1).reshape(-1,1))
                 pts_2 *= r2
-                self.ds = np.concat(pts_1, pts_2, axis = 0) 
-                self.labels = np.concat(np.ones((f)), -1*np.ones((self.num_points - f)))
+                self.ds = np.concatenate((pts_1, pts_2), axis = 0) 
+                self.labels = np.concatenate( (np.ones((f)), -1*np.ones((self.num_points - f))), axis = 0)
         else:
             # create data that is on both sides of a given line given the actual normal to the hyperplane w_1 provided it passes through the origin
             self.ds = np.random.randn(self.num_points, self.n_dim)

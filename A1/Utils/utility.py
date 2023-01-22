@@ -29,6 +29,7 @@ def plot_contour(model, X, y, title):
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
                          np.arange(y_min, y_max, h))
     z = model.forward(np.c_[xx.ravel(), yy.ravel()])
-    plt.contour(xx, yy, z.reshape(xx.shape),[-1,0,1], colors='k')
+    plt.contour(xx, yy, z.reshape(xx.shape), [-1,0,1], colors='k')
     plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', cmap=plt.cm.Paired)
     plt.show()
+    return z

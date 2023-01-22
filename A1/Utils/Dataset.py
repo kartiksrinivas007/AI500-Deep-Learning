@@ -2,7 +2,7 @@ import numpy as np
 import math 
 
 class Dataset:
-    def __init__(self, num_points, n_dim=2 ,mode="NL", dist="Normal", p1=None, p2=None, r1=None , r2=None, separability=None,  w_1= None, frac=0.5, bias=None):
+    def __init__(self, num_points, n_dim=2 ,mode="NL", dist="Normal", p1=None, p2=None, r1=None , r2=None, separability=None, noise_mag = 0.1, w_1= None, frac=0.5, bias=None):
         """
         `num_points`: number of points in the dataset
         `n_dim`: number of dimensions of the dataset
@@ -15,6 +15,7 @@ class Dataset:
         `w_1`: normal to the hyperplane
         `frac`: fraction of points in the dataset that are positive
         `bias`: bias to be added to the dataset
+        `noise_mag`: magnitude of the noise to be added to the circular dataset
         """
         self.p1 = p1
         self.p2 = p2
@@ -26,6 +27,7 @@ class Dataset:
         self.frac = frac
         self.n_dim = n_dim
         self.bias = bias
+        self.noise_mag = noise_mag
         self.num_points = num_points
         if(self.mode == "NL"):
             if(self.dist == "Normal"):
@@ -46,6 +48,8 @@ class Dataset:
                 pts_2 *= r2
                 self.ds = np.concatenate((pts_1, pts_2), axis = 0) 
                 self.labels = np.concatenate( (np.ones((f)), -1*np.ones((self.num_points - f))), axis = 0)
+                #you can add some noise to the dataset
+                self.ds += np.random.randn(self.num_points, self.n_dim)*self.noise_mag
         else:
             # create data that is on both sides of a given line given the actual normal to the hyperplane w_1 provided it passes through the origin
             self.ds = np.random.randn(self.num_points, self.n_dim)

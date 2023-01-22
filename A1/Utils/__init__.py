@@ -1,3 +1,3 @@
 from .Dataset import *
-from .Algorithm import *
+from .Models import *
 from .utility import *

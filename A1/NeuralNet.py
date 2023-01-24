@@ -35,4 +35,4 @@ for epoch in tqdm(range(100)):
 print("Training Accuracy: ", accuracy(nn,X.T, y))
 plt.plot(accuracies)
 plt.show()
-plot_contour_NN(nn, X.T, y, "Nlinear")
+plot_contour_NN(nn, X.T, y, "Neural Network Decision Boundary")

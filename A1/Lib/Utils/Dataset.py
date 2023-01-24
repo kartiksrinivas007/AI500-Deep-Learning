@@ -38,9 +38,9 @@ class Dataset:
                 # create data that is on the border of two circles, add some gaussian noise if needed
                 f = math.ceil(num_points* self.frac)
                 pts_1 = np.random.randn(f, self.n_dim)
-                print(pts_1.shape)
+               
                 norms =  np.linalg.norm(pts_1, axis = 1).reshape(-1,1)
-                print(norms.shape)
+                
                 pts_1 /= norms
                 pts_1 *= r1
                 pts_2 = np.random.randn(num_points - f, self.n_dim)

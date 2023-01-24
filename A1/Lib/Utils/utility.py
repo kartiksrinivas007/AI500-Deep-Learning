@@ -33,3 +33,22 @@ def plot_contour(model, X, y, title):
     plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', cmap=plt.cm.Paired)
     plt.show()
     return z
+
+def plot_contour_NN(model, X, y, title):
+    h = .02  # step size in the mesh
+    x_min, x_max = X[0, :].min() - 1, X[0, :].max() + 1
+    y_min, y_max = X[1,:].min() - 1, X[1,:].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                         np.arange(y_min, y_max, h))
+    print(np.c_[xx.ravel(), yy.ravel()].shape)
+    z = (model.forward(np.c_[xx.ravel(), yy.ravel()].T))[0] - (model.forward(np.c_[xx.ravel(), yy.ravel()].T))[1]
+    print(z.shape)
+    plt.contour(xx, yy, z.reshape(xx.shape), [-1,0,1], colors='k')
+    plt.scatter(X[0, :], X[1, :], c=y)
+    plt.show()
+
+def accuracy(model, X, y):
+    scores = model.forward(X)
+    labels = np.argmax(scores, axis=0)
+    y = y.reshape(-1)
+    return np.sum(labels == y)/y.shape[0]

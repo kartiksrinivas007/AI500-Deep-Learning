@@ -57,3 +57,6 @@ Overall file to be run is `NeuralNet.ipynb`
 The overall picture  that is needed can be seen directly from the `Lib/Utils/Models/Neural_net.py` file.
 The layers are defined in `Lib/Gates/Layers.py` losses are defined in  `Lib/Losses/Loss.py` and the Solver has been implemented in
 `Lib/Solvers/GD.py`. The batch sampler has been defined in `Lib/Utils/batch_sampler.py`
+The loss used is a NLL + Softmax (which is equivalent to binary cross entropy for two classes)
+
+Observations: The decision boundary that has been learnt is giving us 100% classification accuracy on the 0 contour level. Unlike the first two methods, the NN is able to learn a Non linear decision boundary, because of its complicated feature map
